@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".activities.HomeActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -14,6 +15,22 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <!-- Dodany przycisk do pobrania lokalizacji -->
+    <Button
+        android:id="@+id/btnGetLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pobierz Lokalizację" />
+
+    <!-- TextView do wyświetlania lokalizacji -->
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lokalizacja"
+        android:paddingTop="16dp"
+        android:textSize="16sp" />
 
     <!-- Możesz dodać tutaj dodatkowe elementy interfejsu lub pozostawić pustą przestrzeń -->
     <TextView

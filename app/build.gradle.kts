@@ -45,4 +45,6 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     // OkHttp
     implementation(libs.okhttp.logging.interceptor)
+    // Google Play Services Location
+    implementation(libs.play.services.location)
 }
