@@ -4,12 +4,14 @@ import com.example.promoeatsandroid.models.AuthResponse;
 import com.example.promoeatsandroid.models.LoginRequest;
 import com.example.promoeatsandroid.models.User;
 import com.example.promoeatsandroid.models.Restaurant;
+import com.example.promoeatsandroid.models.Promotion;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import java.util.List;
 
 
@@ -26,4 +28,6 @@ public interface ApiService {
     @GET("api/restaurants")
     Call<List<Restaurant>> getRestaurants(@Header("Authorization") String token);
 
+    @GET("api/restaurant/{id}/promotions")
+    Call<List<Promotion>> getPromotions(@Header("Authorization") String token, @Path("id") int restaurantId);
 }

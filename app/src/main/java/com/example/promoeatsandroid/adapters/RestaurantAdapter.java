@@ -34,6 +34,14 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         Restaurant restaurant = restaurantList.get(position);
         holder.tvRestaurantName.setText(restaurant.getName());
         holder.tvRestaurantDetails.setText("Phone: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
+
+        if (restaurant.getLocation() != null) {
+            String coordinates = "Lat: " + restaurant.getLocation().getLatitude() +
+                    ", Lon: " + restaurant.getLocation().getLongitude();
+            holder.tvRestaurantCoordinates.setText(coordinates);
+        } else {
+            holder.tvRestaurantCoordinates.setText("Brak lokalizacji");
+        }
     }
 
     @Override
@@ -42,12 +50,13 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     }
 
     public static class RestaurantViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRestaurantName, tvRestaurantDetails;
+        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates;
 
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             tvRestaurantName = itemView.findViewById(R.id.tvRestaurantName);
             tvRestaurantDetails = itemView.findViewById(R.id.tvRestaurantDetails);
+            tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
         }
     }
 }

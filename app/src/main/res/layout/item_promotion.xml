@@ -6,22 +6,16 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/tvRestaurantName"
+        android:id="@+id/tvPromotionDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tvRestaurantDetails"
+        android:id="@+id/tvPromotionDates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:paddingTop="4dp" />
-    <TextView
-        android:id="@+id/tvRestaurantCoordinates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
         android:paddingTop="4dp" />
 </LinearLayout>

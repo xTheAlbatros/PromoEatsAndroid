@@ -18,16 +18,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.promoeatsandroid.R;
-import com.example.promoeatsandroid.adapters.RestaurantAdapter;
+import com.example.promoeatsandroid.adapters.PromotionAdapter;
 import com.example.promoeatsandroid.models.Location;
+import com.example.promoeatsandroid.models.Promotion;
 import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.network.ApiService;
 import com.example.promoeatsandroid.network.RetrofitClient;
 import com.example.promoeatsandroid.utils.TokenManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,15 +38,18 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity {
 
     private static final int LOCATION_REQUEST_CODE = 100;
+
     private Toolbar toolbar;
     private ApiService apiService;
     private TokenManager tokenManager;
 
     private TextView tvLocation;
     private Button btnGetLocation;
+    private RecyclerView rvPromotions; // RecyclerView for displaying promotions
+    private PromotionAdapter promotionAdapter; // Adapter for promotions
     private FusedLocationProviderClient fusedLocationClient;
 
-    private RecyclerView rvRestaurants; // RecyclerView for displaying restaurants
+    private List<Promotion> allPromotions; // List to store all promotions
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +62,19 @@ public class HomeActivity extends AppCompatActivity {
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
         tokenManager = new TokenManager(getApplicationContext());
 
-        // Initialize UI elements for location
         tvLocation = findViewById(R.id.tvLocation);
         btnGetLocation = findViewById(R.id.btnGetLocation);
+        rvPromotions = findViewById(R.id.rvPromotions);
 
-        // Initialize RecyclerView
-        rvRestaurants = findViewById(R.id.rvRestaurants);
-        rvRestaurants.setLayoutManager(new LinearLayoutManager(this));
+        rvPromotions.setLayoutManager(new LinearLayoutManager(this));
+        allPromotions = new ArrayList<>();
+        promotionAdapter = new PromotionAdapter(allPromotions);
+        rvPromotions.setAdapter(promotionAdapter);
 
-        // Initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         btnGetLocation.setOnClickListener(view -> requestLocation());
 
-        // Fetch and display restaurants
         fetchRestaurants();
     }
 
@@ -93,8 +96,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void logout() {
         String token = "Bearer " + tokenManager.getToken();
-        Call<Void> call = apiService.logout(token);
-        call.enqueue(new Callback<Void>() {
+        apiService.logout(token).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 tokenManager.clearToken();
@@ -120,45 +122,59 @@ public class HomeActivity extends AppCompatActivity {
 
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<android.location.Location>() {
-                        @Override
-                        public void onSuccess(android.location.Location location) {
-                            if (location != null) {
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
-                                Location userLocation = new Location(latitude, longitude);
-                                tvLocation.setText(userLocation.toString());
-                            } else {
-                                Toast.makeText(HomeActivity.this, "Nie udało się uzyskać lokalizacji", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    Location userLocation = new Location(latitude, longitude);
+                    tvLocation.setText("Twoja lokalizacja:\nLat: " + latitude + ", Lon: " + longitude);
+                } else {
+                    Toast.makeText(HomeActivity.this, "Nie udało się uzyskać lokalizacji", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
     private void fetchRestaurants() {
-        // Fetch restaurants from the API
-        String token = "Bearer " + tokenManager.getToken(); // Pobierz token z TokenManager
+        String token = "Bearer " + tokenManager.getToken(); // Pobierz token
+
         apiService.getRestaurants(token).enqueue(new Callback<List<Restaurant>>() {
             @Override
             public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Restaurant> restaurants = response.body();
-                    RestaurantAdapter adapter = new RestaurantAdapter(restaurants);
-                    rvRestaurants.setAdapter(adapter);
+                    fetchPromotionsForRestaurants(restaurants); // Pobierz promocje dla każdej restauracji
                 } else {
                     Toast.makeText(HomeActivity.this, "Nie udało się załadować restauracji: " + response.code(), Toast.LENGTH_SHORT).show();
-                    System.out.println("Błąd: " + response.errorBody());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Restaurant>> call, Throwable t) {
                 Toast.makeText(HomeActivity.this, "Błąd sieci: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
             }
         });
+    }
+
+    private void fetchPromotionsForRestaurants(List<Restaurant> restaurants) {
+        String token = "Bearer " + tokenManager.getToken();
+
+        for (Restaurant restaurant : restaurants) {
+            apiService.getPromotions(token, restaurant.getId()).enqueue(new Callback<List<Promotion>>() {
+                @Override
+                public void onResponse(Call<List<Promotion>> call, Response<List<Promotion>> response) {
+                    if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                        allPromotions.addAll(response.body());
+                        promotionAdapter.notifyDataSetChanged(); // Zaktualizuj widok
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Promotion>> call, Throwable t) {
+                    Toast.makeText(HomeActivity.this, "Błąd sieci: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
