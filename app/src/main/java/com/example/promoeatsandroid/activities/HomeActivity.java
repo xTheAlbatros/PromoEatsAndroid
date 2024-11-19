@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.promoeatsandroid.R;
-import com.example.promoeatsandroid.adapters.PromotionAdapter;
-import com.example.promoeatsandroid.models.Location;
+import com.example.promoeatsandroid.adapters.RestaurantWithPromotionsAdapter;
 import com.example.promoeatsandroid.models.Promotion;
 import com.example.promoeatsandroid.models.Restaurant;
+import com.example.promoeatsandroid.models.RestaurantWithPromotions;
 import com.example.promoeatsandroid.network.ApiService;
 import com.example.promoeatsandroid.network.RetrofitClient;
 import com.example.promoeatsandroid.utils.TokenManager;
@@ -45,11 +45,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView tvLocation;
     private Button btnGetLocation;
-    private RecyclerView rvPromotions; // RecyclerView for displaying promotions
-    private PromotionAdapter promotionAdapter; // Adapter for promotions
-    private FusedLocationProviderClient fusedLocationClient;
+    private RecyclerView rvRestaurantsWithPromotions;
 
-    private List<Promotion> allPromotions; // List to store all promotions
+    private FusedLocationProviderClient fusedLocationClient;
+    private List<RestaurantWithPromotions> restaurantData;
+    private RestaurantWithPromotionsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +64,12 @@ public class HomeActivity extends AppCompatActivity {
 
         tvLocation = findViewById(R.id.tvLocation);
         btnGetLocation = findViewById(R.id.btnGetLocation);
-        rvPromotions = findViewById(R.id.rvPromotions);
+        rvRestaurantsWithPromotions = findViewById(R.id.rvRestaurantsWithPromotions);
 
-        rvPromotions.setLayoutManager(new LinearLayoutManager(this));
-        allPromotions = new ArrayList<>();
-        promotionAdapter = new PromotionAdapter(allPromotions);
-        rvPromotions.setAdapter(promotionAdapter);
+        rvRestaurantsWithPromotions.setLayoutManager(new LinearLayoutManager(this));
+        restaurantData = new ArrayList<>();
+        adapter = new RestaurantWithPromotionsAdapter(restaurantData);
+        rvRestaurantsWithPromotions.setAdapter(adapter);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -126,7 +126,6 @@ public class HomeActivity extends AppCompatActivity {
                 if (location != null) {
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    Location userLocation = new Location(latitude, longitude);
                     tvLocation.setText("Twoja lokalizacja:\nLat: " + latitude + ", Lon: " + longitude);
                 } else {
                     Toast.makeText(HomeActivity.this, "Nie udało się uzyskać lokalizacji", Toast.LENGTH_SHORT).show();
@@ -136,14 +135,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void fetchRestaurants() {
-        String token = "Bearer " + tokenManager.getToken(); // Pobierz token
+        String token = "Bearer " + tokenManager.getToken();
 
         apiService.getRestaurants(token).enqueue(new Callback<List<Restaurant>>() {
             @Override
             public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Restaurant> restaurants = response.body();
-                    fetchPromotionsForRestaurants(restaurants); // Pobierz promocje dla każdej restauracji
+                    fetchPromotionsForRestaurants(restaurants);
                 } else {
                     Toast.makeText(HomeActivity.this, "Nie udało się załadować restauracji: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
@@ -164,8 +163,8 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<Promotion>> call, Response<List<Promotion>> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                        allPromotions.addAll(response.body());
-                        promotionAdapter.notifyDataSetChanged(); // Zaktualizuj widok
+                        restaurantData.add(new RestaurantWithPromotions(restaurant, response.body()));
+                        adapter.notifyDataSetChanged();
                     }
                 }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -33,9 +32,9 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <!-- RecyclerView do wyświetlania promocji -->
+    <!-- RecyclerView do wyświetlania restauracji z promocjami -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPromotions"
+        android:id="@+id/rvRestaurantsWithPromotions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="16dp" />

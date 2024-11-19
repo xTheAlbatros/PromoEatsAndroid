@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+    <!-- Nazwa restauracji -->
     <TextView
         android:id="@+id/tvRestaurantName"
         android:layout_width="wrap_content"
@@ -12,16 +13,26 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
+    <!-- Szczegóły restauracji -->
     <TextView
         android:id="@+id/tvRestaurantDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:paddingTop="4dp" />
+
+    <!-- Współrzędne restauracji -->
     <TextView
         android:id="@+id/tvRestaurantCoordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:paddingTop="4dp" />
+
+    <!-- RecyclerView do promocji -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPromotions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 </LinearLayout>

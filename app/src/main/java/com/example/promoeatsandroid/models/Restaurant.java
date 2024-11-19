@@ -8,6 +8,8 @@ public class Restaurant {
     private String website;
     private Location location;
 
+    private boolean isExpanded;
+
     // Gettery i settery
     public int getId() {
         return id;
@@ -49,5 +51,13 @@ public class Restaurant {
     }
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
     }
 }
