@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
 
         rvRestaurantsWithPromotions.setLayoutManager(new LinearLayoutManager(this));
         restaurantData = new ArrayList<>();
-        adapter = new RestaurantWithPromotionsAdapter(restaurantData);
+        adapter = new RestaurantWithPromotionsAdapter(this, restaurantData);
         rvRestaurantsWithPromotions.setAdapter(adapter);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

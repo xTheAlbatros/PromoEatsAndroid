@@ -5,6 +5,7 @@ import com.example.promoeatsandroid.models.LoginRequest;
 import com.example.promoeatsandroid.models.User;
 import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.Promotion;
+import com.example.promoeatsandroid.models.Review;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -30,4 +31,7 @@ public interface ApiService {
 
     @GET("api/restaurant/{id}/promotions")
     Call<List<Promotion>> getPromotions(@Header("Authorization") String token, @Path("id") int restaurantId);
+
+    @GET("api/restaurant/{id}/reviews")
+    Call<List<Review>> getReviews(@Header("Authorization") String token, @Path("id") int restaurantId);
 }

@@ -1,16 +1,20 @@
 package com.example.promoeatsandroid.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.promoeatsandroid.R;
-import com.example.promoeatsandroid.models.Promotion;
+import com.example.promoeatsandroid.activities.PromotionsActivity;
+import com.example.promoeatsandroid.activities.ReviewsActivity;
 import com.example.promoeatsandroid.models.RestaurantWithPromotions;
 
 import java.util.List;
@@ -18,8 +22,10 @@ import java.util.List;
 public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<RestaurantWithPromotionsAdapter.RestaurantViewHolder> {
 
     private List<RestaurantWithPromotions> data;
+    private Context context;
 
-    public RestaurantWithPromotionsAdapter(List<RestaurantWithPromotions> data) {
+    public RestaurantWithPromotionsAdapter(Context context, List<RestaurantWithPromotions> data) {
+        this.context = context;
         this.data = data;
     }
 
@@ -32,24 +38,26 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
-        RestaurantWithPromotions restaurantWithPromotions = data.get(position);
+        RestaurantWithPromotions restaurant = data.get(position);
 
-        holder.tvRestaurantName.setText(restaurantWithPromotions.getRestaurant().getName());
-        holder.tvRestaurantDetails.setText(restaurantWithPromotions.getRestaurant().getEmail());
-        holder.tvRestaurantCoordinates.setText("Lat: " + restaurantWithPromotions.getRestaurant().getLocation().getLatitude() +
-                ", Lon: " + restaurantWithPromotions.getRestaurant().getLocation().getLongitude());
-
+        holder.tvRestaurantName.setText(restaurant.getRestaurant().getName());
         holder.itemView.setOnClickListener(v -> {
-            boolean expanded = restaurantWithPromotions.getRestaurant().isExpanded();
-            restaurantWithPromotions.getRestaurant().setExpanded(!expanded);
-            notifyItemChanged(position);
+            boolean expanded = restaurant.getRestaurant().isExpanded();
+            restaurant.getRestaurant().setExpanded(!expanded);
+            holder.btnContainer.setVisibility(expanded ? View.GONE : View.VISIBLE);
         });
 
-        boolean expanded = restaurantWithPromotions.getRestaurant().isExpanded();
-        holder.promotionRecyclerView.setVisibility(expanded ? View.VISIBLE : View.GONE);
+        holder.btnShowPromotions.setOnClickListener(v -> {
+            Intent intent = new Intent(context, PromotionsActivity.class);
+            intent.putExtra("restaurantId", restaurant.getRestaurant().getId());
+            context.startActivity(intent);
+        });
 
-        PromotionAdapter promotionAdapter = new PromotionAdapter(restaurantWithPromotions.getPromotions());
-        holder.promotionRecyclerView.setAdapter(promotionAdapter);
+        holder.btnShowReviews.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ReviewsActivity.class);
+            intent.putExtra("restaurantId", restaurant.getRestaurant().getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -58,16 +66,16 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
     }
 
     static class RestaurantViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates;
-        RecyclerView promotionRecyclerView;
+        TextView tvRestaurantName;
+        LinearLayout btnContainer;
+        Button btnShowPromotions, btnShowReviews;
 
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             tvRestaurantName = itemView.findViewById(R.id.tvRestaurantName);
-            tvRestaurantDetails = itemView.findViewById(R.id.tvRestaurantDetails);
-            tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
-            promotionRecyclerView = itemView.findViewById(R.id.rvPromotions);
-            promotionRecyclerView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+            btnContainer = itemView.findViewById(R.id.btnContainer);
+            btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);
+            btnShowReviews = itemView.findViewById(R.id.btnShowReviews);
         }
     }
 }

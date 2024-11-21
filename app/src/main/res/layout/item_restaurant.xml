@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:text="Nazwa Restauracji" />
 
     <!-- Szczegóły restauracji -->
     <TextView
@@ -19,20 +20,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:paddingTop="4dp" />
+        android:text="Szczegóły Restauracji" />
 
-    <!-- Współrzędne restauracji -->
+    <!-- Koordynaty restauracji -->
     <TextView
         android:id="@+id/tvRestaurantCoordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:paddingTop="4dp" />
+        android:text="Koordynaty" />
 
-    <!-- RecyclerView do promocji -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPromotions"
+    <!-- Przyciski (ukryte domyślnie) -->
+    <LinearLayout
+        android:id="@+id/btnContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:paddingTop="8dp">
+
+        <Button
+            android:id="@+id/btnShowPromotions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pokaż promocje" />
+
+        <Button
+            android:id="@+id/btnShowReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pokaż opinie"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
 </LinearLayout>
