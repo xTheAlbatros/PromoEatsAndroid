@@ -1,8 +1,11 @@
 package com.example.promoeatsandroid.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +75,43 @@ public class HomeActivity extends AppCompatActivity {
         btnGetLocation.setOnClickListener(view -> requestLocation());
 
         fetchRestaurants();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu); // Inflate the menu with the logout option
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) { // Check if the logout option was selected
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        String token = "Bearer " + tokenManager.getToken();
+        apiService.logout(token).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    tokenManager.clearToken();
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish(); // End the current activity
+                } else {
+                    Toast.makeText(HomeActivity.this, "Nie udało się wylogować.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Błąd sieci podczas wylogowywania: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchRestaurants() {
