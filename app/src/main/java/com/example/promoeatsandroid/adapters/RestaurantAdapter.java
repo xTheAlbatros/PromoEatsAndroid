@@ -43,6 +43,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
         holder.tvRestaurantName.setText(restaurant.getName());
         holder.tvRestaurantDetails.setText("Phone: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
+        holder.tvRestaurantWebsite.setText("Website: " + restaurant.getWebsite());
 
         if (restaurant.getLocation() != null) {
             String coordinates = "Lat: " + restaurant.getLocation().getLatitude() +
@@ -52,23 +53,18 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             holder.tvRestaurantCoordinates.setText("Brak lokalizacji");
         }
 
-        // Obsługa kliknięcia na nazwę restauracji, aby pokazać/ukryć przyciski
         holder.itemView.setOnClickListener(v -> {
-            if (holder.btnContainer.getVisibility() == View.GONE) {
-                holder.btnContainer.setVisibility(View.VISIBLE);
-            } else {
-                holder.btnContainer.setVisibility(View.GONE);
-            }
+            boolean expanded = restaurant.isExpanded();
+            restaurant.setExpanded(!expanded);
+            holder.btnContainer.setVisibility(expanded ? View.GONE : View.VISIBLE);
         });
 
-        // Obsługa przycisku "Pokaż promocje"
         holder.btnShowPromotions.setOnClickListener(v -> {
             Intent intent = new Intent(context, PromotionsActivity.class);
             intent.putExtra("restaurantId", restaurant.getId());
             context.startActivity(intent);
         });
 
-        // Obsługa przycisku "Pokaż opinie"
         holder.btnShowReviews.setOnClickListener(v -> {
             Intent intent = new Intent(context, ReviewsActivity.class);
             intent.putExtra("restaurantId", restaurant.getId());
@@ -82,7 +78,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
     }
 
     public static class RestaurantViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates;
+        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates, tvRestaurantWebsite;
         LinearLayout btnContainer;
         Button btnShowPromotions, btnShowReviews;
 
@@ -90,6 +86,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             super(itemView);
             tvRestaurantName = itemView.findViewById(R.id.tvRestaurantName);
             tvRestaurantDetails = itemView.findViewById(R.id.tvRestaurantDetails);
+            tvRestaurantWebsite = itemView.findViewById(R.id.tvRestaurantWebsite);
             tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
             btnContainer = itemView.findViewById(R.id.btnContainer);
             btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);

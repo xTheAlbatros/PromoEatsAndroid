@@ -22,6 +22,14 @@
         android:textSize="14sp"
         android:text="Szczegóły Restauracji" />
 
+    <!-- Strona internetowa -->
+    <TextView
+        android:id="@+id/tvRestaurantWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:text="Website: www.example.com" />
+
     <!-- Koordynaty restauracji -->
     <TextView
         android:id="@+id/tvRestaurantCoordinates"
@@ -30,7 +38,7 @@
         android:textSize="12sp"
         android:text="Koordynaty" />
 
-    <!-- Przyciski (ukryte domyślnie) -->
+    <!-- Przyciski -->
     <LinearLayout
         android:id="@+id/btnContainer"
         android:layout_width="match_parent"

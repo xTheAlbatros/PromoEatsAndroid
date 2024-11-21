@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.promoeatsandroid.R;
 import com.example.promoeatsandroid.activities.PromotionsActivity;
 import com.example.promoeatsandroid.activities.ReviewsActivity;
+import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.RestaurantWithPromotions;
 
 import java.util.List;
@@ -38,24 +39,36 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
 
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
-        RestaurantWithPromotions restaurant = data.get(position);
+        RestaurantWithPromotions restaurantWithPromotions = data.get(position);
+        Restaurant restaurant = restaurantWithPromotions.getRestaurant();
 
-        holder.tvRestaurantName.setText(restaurant.getRestaurant().getName());
+        holder.tvRestaurantName.setText(restaurant.getName());
+        holder.tvRestaurantDetails.setText("Phone: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
+        holder.tvRestaurantWebsite.setText("Website: " + (restaurant.getWebsite() != null ? restaurant.getWebsite() : "Brak danych"));
+
+        if (restaurant.getLocation() != null) {
+            String coordinates = "Lat: " + restaurant.getLocation().getLatitude() +
+                    ", Lon: " + restaurant.getLocation().getLongitude();
+            holder.tvRestaurantCoordinates.setText(coordinates);
+        } else {
+            holder.tvRestaurantCoordinates.setText("Brak lokalizacji");
+        }
+
         holder.itemView.setOnClickListener(v -> {
-            boolean expanded = restaurant.getRestaurant().isExpanded();
-            restaurant.getRestaurant().setExpanded(!expanded);
+            boolean expanded = restaurant.isExpanded();
+            restaurant.setExpanded(!expanded);
             holder.btnContainer.setVisibility(expanded ? View.GONE : View.VISIBLE);
         });
 
         holder.btnShowPromotions.setOnClickListener(v -> {
             Intent intent = new Intent(context, PromotionsActivity.class);
-            intent.putExtra("restaurantId", restaurant.getRestaurant().getId());
+            intent.putExtra("restaurantId", restaurant.getId());
             context.startActivity(intent);
         });
 
         holder.btnShowReviews.setOnClickListener(v -> {
             Intent intent = new Intent(context, ReviewsActivity.class);
-            intent.putExtra("restaurantId", restaurant.getRestaurant().getId());
+            intent.putExtra("restaurantId", restaurant.getId());
             context.startActivity(intent);
         });
     }
@@ -66,13 +79,16 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
     }
 
     static class RestaurantViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRestaurantName;
+        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates, tvRestaurantWebsite;
         LinearLayout btnContainer;
         Button btnShowPromotions, btnShowReviews;
 
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
             tvRestaurantName = itemView.findViewById(R.id.tvRestaurantName);
+            tvRestaurantDetails = itemView.findViewById(R.id.tvRestaurantDetails);
+            tvRestaurantWebsite = itemView.findViewById(R.id.tvRestaurantWebsite);
+            tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
             btnContainer = itemView.findViewById(R.id.btnContainer);
             btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);
             btnShowReviews = itemView.findViewById(R.id.btnShowReviews);

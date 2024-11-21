@@ -1,10 +1,14 @@
 package com.example.promoeatsandroid.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Restaurant {
     private int id;
     private String name;
     private String phone;
     private String email;
+
+    @SerializedName("webside") // Mapowanie z backendu
     private String website;
     private Location location;
 
@@ -56,7 +60,6 @@ public class Restaurant {
     public boolean isExpanded() {
         return isExpanded;
     }
-
     public void setExpanded(boolean expanded) {
         isExpanded = expanded;
     }
