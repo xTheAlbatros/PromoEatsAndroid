@@ -1,18 +1,21 @@
 package com.example.promoeatsandroid.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Review {
-    private int id;
     private int rate;
     private String comment;
+
+    @SerializedName("restaurants")
+    private Restaurant restaurant;
+
+    @SerializedName("created_time")
     private String createdTime;
 
-    // Gettery i settery
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Review(int rate, String comment, Restaurant restaurant) {
+        this.rate = rate;
+        this.comment = comment;
+        this.restaurant = restaurant;
     }
 
     public int getRate() {
@@ -29,6 +32,14 @@ public class Review {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public String getCreatedTime() {

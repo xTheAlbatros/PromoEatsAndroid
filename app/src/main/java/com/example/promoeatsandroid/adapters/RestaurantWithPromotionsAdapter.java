@@ -8,17 +8,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.example.promoeatsandroid.models.Promotion;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.promoeatsandroid.R;
+import com.example.promoeatsandroid.activities.AddReviewActivity;
 import com.example.promoeatsandroid.activities.PromotionsActivity;
 import com.example.promoeatsandroid.activities.ReviewsActivity;
 import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.RestaurantWithPromotions;
 
 import java.util.List;
+import android.util.Log;
+import android.app.Activity;
 
 public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<RestaurantWithPromotionsAdapter.RestaurantViewHolder> {
 
@@ -26,6 +30,9 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
     private Context context;
 
     public RestaurantWithPromotionsAdapter(Context context, List<RestaurantWithPromotions> data) {
+        if (!(context instanceof Activity)) {
+            throw new IllegalArgumentException("Context must be an instance of Activity");
+        }
         this.context = context;
         this.data = data;
     }
@@ -44,7 +51,7 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
 
         holder.tvRestaurantName.setText(restaurant.getName());
         holder.tvRestaurantDetails.setText("Phone: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
-        holder.tvRestaurantWebsite.setText("Website: " + (restaurant.getWebsite() != null ? restaurant.getWebsite() : "Brak danych"));
+        holder.tvRestaurantWebsite.setText("Website: " + restaurant.getWebsite());
 
         if (restaurant.getLocation() != null) {
             String coordinates = "Lat: " + restaurant.getLocation().getLatitude() +
@@ -71,6 +78,18 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
             intent.putExtra("restaurantId", restaurant.getId());
             context.startActivity(intent);
         });
+
+        holder.btnAddReview.setOnClickListener(v -> {
+            Log.d("RestaurantAdapter", "Add Review button clicked for restaurantId: " + restaurant.getId());
+            try {
+                Intent intent = new Intent(context, AddReviewActivity.class);
+                intent.putExtra("restaurantId", restaurant.getId());
+                Log.d("RestaurantAdapter", "Intent created with restaurantId: " + restaurant.getId());
+                context.startActivity(intent);
+            } catch (Exception e) {
+                Log.e("RestaurantAdapter", "Error while starting AddReviewActivity", e);
+            }
+        });
     }
 
     @Override
@@ -81,7 +100,7 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
     static class RestaurantViewHolder extends RecyclerView.ViewHolder {
         TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates, tvRestaurantWebsite;
         LinearLayout btnContainer;
-        Button btnShowPromotions, btnShowReviews;
+        Button btnShowPromotions, btnShowReviews, btnAddReview;
 
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -92,6 +111,7 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
             btnContainer = itemView.findViewById(R.id.btnContainer);
             btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);
             btnShowReviews = itemView.findViewById(R.id.btnShowReviews);
+            btnAddReview = itemView.findViewById(R.id.btnAddReview);
         }
     }
 }

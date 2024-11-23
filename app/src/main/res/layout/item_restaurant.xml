@@ -59,5 +59,12 @@
             android:layout_height="wrap_content"
             android:text="Pokaż opinie"
             android:layout_marginStart="16dp" />
+
+        <Button
+            android:id="@+id/btnAddReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dodaj opinię"
+            android:layout_marginStart="16dp" />
     </LinearLayout>
 </LinearLayout>

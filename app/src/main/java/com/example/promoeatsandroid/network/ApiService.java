@@ -34,4 +34,7 @@ public interface ApiService {
 
     @GET("api/restaurant/{id}/reviews")
     Call<List<Review>> getReviews(@Header("Authorization") String token, @Path("id") int restaurantId);
+
+    @POST("api/restaurant/review")
+    Call<Void> addReview(@Header("Authorization") String token, @Body Review review);
 }

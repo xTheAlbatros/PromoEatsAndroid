@@ -1,11 +1,11 @@
 package com.example.promoeatsandroid.activities;
 
+import com.example.promoeatsandroid.models.RestaurantWithPromotions;
+import com.example.promoeatsandroid.adapters.RestaurantWithPromotionsAdapter;
+
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.promoeatsandroid.R;
-import com.example.promoeatsandroid.adapters.RestaurantAdapter;
 import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.network.ApiService;
 import com.example.promoeatsandroid.network.RetrofitClient;
@@ -45,8 +44,8 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnGetLocation;
     private RecyclerView rvRestaurants;
 
-    private List<Restaurant> restaurantList;
-    private RestaurantAdapter adapter;
+    private List<RestaurantWithPromotions> restaurantWithPromotionsList; // Poprawione pole klasy
+    private RestaurantWithPromotionsAdapter adapter; // Poprawiono typ adaptera
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -55,63 +54,32 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // Inicjalizacja widoków
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-        tokenManager = new TokenManager(getApplicationContext());
 
         tvLocation = findViewById(R.id.tvLocation);
         btnGetLocation = findViewById(R.id.btnGetLocation);
         rvRestaurants = findViewById(R.id.rvRestaurantsWithPromotions);
 
+        // Inicjalizacja API i tokenu
+        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        tokenManager = new TokenManager(getApplicationContext());
+
+        // Inicjalizacja RecyclerView
         rvRestaurants.setLayoutManager(new LinearLayoutManager(this));
-        restaurantList = new ArrayList<>();
-        adapter = new RestaurantAdapter(this, restaurantList);
+        restaurantWithPromotionsList = new ArrayList<>();
+        adapter = new RestaurantWithPromotionsAdapter(this, restaurantWithPromotionsList);
         rvRestaurants.setAdapter(adapter);
 
+        // Inicjalizacja klienta lokalizacji
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        // Obsługa przycisku pobierania lokalizacji
         btnGetLocation.setOnClickListener(view -> requestLocation());
 
+        // Pobieranie restauracji
         fetchRestaurants();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu); // Inflate the menu with the logout option
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_logout) { // Check if the logout option was selected
-            logout();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void logout() {
-        String token = "Bearer " + tokenManager.getToken();
-        apiService.logout(token).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    tokenManager.clearToken();
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish(); // End the current activity
-                } else {
-                    Toast.makeText(HomeActivity.this, "Nie udało się wylogować.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(HomeActivity.this, "Błąd sieci podczas wylogowywania: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void fetchRestaurants() {
@@ -121,9 +89,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    restaurantList.clear();
-                    restaurantList.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+                    restaurantWithPromotionsList.clear();
+                    for (Restaurant restaurant : response.body()) {
+                        // Tworzenie pustej listy promocji dla restauracji
+                        restaurantWithPromotionsList.add(new RestaurantWithPromotions(restaurant, new ArrayList<>()));
+                    }
+                    adapter.notifyDataSetChanged(); // Powiadom adapter o zmianach w danych
                 } else {
                     Toast.makeText(HomeActivity.this, "Nie udało się załadować restauracji: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
