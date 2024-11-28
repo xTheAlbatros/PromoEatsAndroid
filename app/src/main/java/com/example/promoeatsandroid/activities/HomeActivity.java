@@ -1,20 +1,15 @@
 package com.example.promoeatsandroid.activities;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,8 +20,6 @@ import com.example.promoeatsandroid.models.RestaurantWithPromotions;
 import com.example.promoeatsandroid.network.ApiService;
 import com.example.promoeatsandroid.network.RetrofitClient;
 import com.example.promoeatsandroid.utils.TokenManager;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,21 +30,17 @@ import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static final int LOCATION_REQUEST_CODE = 100;
-
     private Toolbar toolbar;
     private ApiService apiService;
     private TokenManager tokenManager;
 
-    private TextView tvLocation;
-    private Button btnGetLocation, btnToggleFavourites;
+    private Button btnToggleFavourites;
     private RecyclerView rvRestaurants;
 
     private List<RestaurantWithPromotions> restaurantWithPromotionsList;
     private List<Restaurant> favouriteRestaurants;
     private RestaurantWithPromotionsAdapter adapter;
 
-    private FusedLocationProviderClient fusedLocationClient;
     private boolean showingFavourites = false;
 
     @Override
@@ -67,10 +56,9 @@ public class HomeActivity extends AppCompatActivity {
         tokenManager = new TokenManager(getApplicationContext());
 
         // Inicjalizacja widoków
-        tvLocation = findViewById(R.id.tvLocation);
-        btnGetLocation = findViewById(R.id.btnGetLocation);
         btnToggleFavourites = findViewById(R.id.btnToggleFavourites);
         rvRestaurants = findViewById(R.id.rvRestaurantsWithPromotions);
+        Button btnLocationActivity = findViewById(R.id.btnLocationActivity);
 
         rvRestaurants.setLayoutManager(new LinearLayoutManager(this));
 
@@ -80,11 +68,12 @@ public class HomeActivity extends AppCompatActivity {
         adapter = new RestaurantWithPromotionsAdapter(this, restaurantWithPromotionsList, showingFavourites);
         rvRestaurants.setAdapter(adapter);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         // Słuchacze przycisków
-        btnGetLocation.setOnClickListener(v -> requestLocation());
         btnToggleFavourites.setOnClickListener(v -> toggleFavourites());
+        btnLocationActivity.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, LocationActivity.class);
+            startActivity(intent);
+        });
 
         // Pobierz ulubione i restauracje
         fetchFavourites(() -> fetchRestaurants());
@@ -189,49 +178,6 @@ public class HomeActivity extends AppCompatActivity {
             fetchRestaurants();
         }
     }
-
-    private void requestLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-        } else {
-            fetchLocation();
-        }
-    }
-
-    private void fetchLocation() {
-        try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        tvLocation.setText("Twoja lokalizacja:\nLat: " + latitude + ", Lon: " + longitude);
-                    } else {
-                        Toast.makeText(this, "Nie udało się uzyskać lokalizacji", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(this, "Błąd pobierania lokalizacji: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-            } else {
-                Toast.makeText(this, "Brak uprawnień do lokalizacji.", Toast.LENGTH_SHORT).show();
-            }
-        } catch (SecurityException e) {
-            Toast.makeText(this, "Błąd bezpieczeństwa: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults); // Wywołanie metody nadrzędnej
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                fetchLocation();
-            } else {
-                Toast.makeText(this, "Uprawnienie do lokalizacji jest wymagane", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
 
     private boolean isFavourite(int restaurantId) {
         for (Restaurant fav : favouriteRestaurants) {
