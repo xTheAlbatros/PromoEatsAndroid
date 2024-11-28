@@ -2,6 +2,7 @@ package com.example.promoeatsandroid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.example.promoeatsandroid.models.RestaurantWithPromotions;
 import com.example.promoeatsandroid.network.ApiService;
 import com.example.promoeatsandroid.network.RetrofitClient;
 import com.example.promoeatsandroid.utils.TokenManager;
+import com.example.promoeatsandroid.models.RestaurantRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,15 @@ public class HomeActivity extends AppCompatActivity {
         favouriteRestaurants = new ArrayList<>();
         adapter = new RestaurantWithPromotionsAdapter(this, restaurantWithPromotionsList, showingFavourites);
         rvRestaurants.setAdapter(adapter);
+
+        // Odbierz obiekt RestaurantRequest z Intent
+        RestaurantRequest restaurantRequest = (RestaurantRequest) getIntent().getSerializableExtra("restaurantRequest");
+        if (restaurantRequest != null) {
+            // Wyświetl obiekt dla testów
+            Toast.makeText(this, restaurantRequest.toString(), Toast.LENGTH_LONG).show();
+            // Możesz również wyświetlić w logach
+            Log.d("HomeActivity", "Otrzymano RestaurantRequest: " + restaurantRequest);
+        }
 
         // Słuchacze przycisków
         btnToggleFavourites.setOnClickListener(v -> toggleFavourites());

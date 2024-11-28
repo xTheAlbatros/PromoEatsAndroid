@@ -1,6 +1,8 @@
 package com.example.promoeatsandroid.models;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private double latitude;
     private double longitude;
 
@@ -13,16 +15,8 @@ public class Location {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
     public double getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
     }
 
     @Override

@@ -1,31 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Dodajemy ScrollView, aby zawartość była przewijalna, jeśli nie mieści się na ekranie -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:padding="16dp">
 
-    <!-- Przycisk do pobrania lokalizacji -->
-    <Button
-        android:id="@+id/btnGetLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pobierz Lokalizację" />
-
-    <!-- TextView do wyświetlania lokalizacji -->
-    <TextView
-        android:id="@+id/tvLocation"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:text="Twoja lokalizacja"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
 
-    <!-- Przycisk do powrotu do HomeActivity -->
-    <Button
-        android:id="@+id/btnGoHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Powrót do Strony Głównej" />
-</LinearLayout>
+        <!-- Opcja 1: Pobierz lokalizację automatycznie -->
+        <TextView
+            android:id="@+id/tvOption1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. Pobierz lokalizację automatycznie" />
+
+        <Button
+            android:id="@+id/btnGetLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pobierz Lokalizację" />
+
+        <!-- Wyświetlanie automatycznej lokalizacji -->
+        <TextView
+            android:id="@+id/tvAutoLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Automatyczna lokalizacja"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Opcja 2: Wprowadź lokalizację samemu -->
+        <TextView
+            android:id="@+id/tvOption2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. Wprowadź lokalizację samemu" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wprowadź adres" />
+
+        <Button
+            android:id="@+id/btnGetLocationFromAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Znajdź Lokalizację" />
+
+        <!-- Wyświetlanie lokalizacji z adresu -->
+        <TextView
+            android:id="@+id/tvManualLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="Lokalizacja z adresu"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Wprowadzenie zakresu wyszukiwania -->
+        <TextView
+            android:id="@+id/tvRangePrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Podaj zakres wyszukiwania w km" />
+
+        <EditText
+            android:id="@+id/etRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Zakres w km"
+            android:inputType="number" />
+
+        <!-- Przycisk do wyszukania restauracji -->
+        <Button
+            android:id="@+id/btnSearchRestaurants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wyszukaj Restauracje!" />
+
+        <!-- Przycisk do powrotu do HomeActivity -->
+        <Button
+            android:id="@+id/btnGoHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Powrót do Strony Głównej" />
+    </LinearLayout>
+</ScrollView>
