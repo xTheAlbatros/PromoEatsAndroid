@@ -2,13 +2,14 @@ package com.example.promoeatsandroid.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.example.promoeatsandroid.models.Promotion;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,24 +18,31 @@ import com.example.promoeatsandroid.R;
 import com.example.promoeatsandroid.activities.AddReviewActivity;
 import com.example.promoeatsandroid.activities.PromotionsActivity;
 import com.example.promoeatsandroid.activities.ReviewsActivity;
-import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.RestaurantWithPromotions;
+import com.example.promoeatsandroid.network.ApiService;
+import com.example.promoeatsandroid.network.RetrofitClient;
+import com.example.promoeatsandroid.utils.TokenManager;
 
 import java.util.List;
-import android.util.Log;
-import android.app.Activity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<RestaurantWithPromotionsAdapter.RestaurantViewHolder> {
 
     private List<RestaurantWithPromotions> data;
     private Context context;
+    private boolean showingFavourites;
+    private ApiService apiService;
+    private TokenManager tokenManager;
 
-    public RestaurantWithPromotionsAdapter(Context context, List<RestaurantWithPromotions> data) {
-        if (!(context instanceof Activity)) {
-            throw new IllegalArgumentException("Context must be an instance of Activity");
-        }
+    public RestaurantWithPromotionsAdapter(Context context, List<RestaurantWithPromotions> data, boolean showingFavourites) {
         this.context = context;
         this.data = data;
+        this.showingFavourites = showingFavourites;
+        this.apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        this.tokenManager = new TokenManager(context);
     }
 
     @NonNull
@@ -47,49 +55,107 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
     @Override
     public void onBindViewHolder(@NonNull RestaurantViewHolder holder, int position) {
         RestaurantWithPromotions restaurantWithPromotions = data.get(position);
-        Restaurant restaurant = restaurantWithPromotions.getRestaurant();
 
-        holder.tvRestaurantName.setText(restaurant.getName());
-        holder.tvRestaurantDetails.setText("Phone: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
-        holder.tvRestaurantWebsite.setText("Website: " + restaurant.getWebsite());
+        holder.tvRestaurantName.setText(restaurantWithPromotions.getRestaurant().getName());
+        holder.tvRestaurantDetails.setText("Phone: " + restaurantWithPromotions.getRestaurant().getPhone());
+        holder.tvRestaurantWebsite.setText("Website: " + restaurantWithPromotions.getRestaurant().getWebsite());
 
-        if (restaurant.getLocation() != null) {
-            String coordinates = "Lat: " + restaurant.getLocation().getLatitude() +
-                    ", Lon: " + restaurant.getLocation().getLongitude();
-            holder.tvRestaurantCoordinates.setText(coordinates);
+        if (restaurantWithPromotions.getRestaurant().getLocation() != null) {
+            double latitude = restaurantWithPromotions.getRestaurant().getLocation().getLatitude();
+            double longitude = restaurantWithPromotions.getRestaurant().getLocation().getLongitude();
+            holder.tvRestaurantCoordinates.setText("Lat: " + latitude + ", Lon: " + longitude);
         } else {
-            holder.tvRestaurantCoordinates.setText("Brak lokalizacji");
+            holder.tvRestaurantCoordinates.setText("Brak danych lokalizacji");
         }
 
         holder.itemView.setOnClickListener(v -> {
-            boolean expanded = restaurant.isExpanded();
-            restaurant.setExpanded(!expanded);
+            boolean expanded = restaurantWithPromotions.getRestaurant().isExpanded();
+            restaurantWithPromotions.getRestaurant().setExpanded(!expanded);
             holder.btnContainer.setVisibility(expanded ? View.GONE : View.VISIBLE);
         });
 
         holder.btnShowPromotions.setOnClickListener(v -> {
             Intent intent = new Intent(context, PromotionsActivity.class);
-            intent.putExtra("restaurantId", restaurant.getId());
+            intent.putExtra("restaurantId", restaurantWithPromotions.getRestaurant().getId());
             context.startActivity(intent);
         });
 
         holder.btnShowReviews.setOnClickListener(v -> {
             Intent intent = new Intent(context, ReviewsActivity.class);
-            intent.putExtra("restaurantId", restaurant.getId());
+            intent.putExtra("restaurantId", restaurantWithPromotions.getRestaurant().getId());
             context.startActivity(intent);
         });
 
         holder.btnAddReview.setOnClickListener(v -> {
-            Log.d("RestaurantAdapter", "Add Review button clicked for restaurantId: " + restaurant.getId());
-            try {
-                Intent intent = new Intent(context, AddReviewActivity.class);
-                intent.putExtra("restaurantId", restaurant.getId());
-                Log.d("RestaurantAdapter", "Intent created with restaurantId: " + restaurant.getId());
-                context.startActivity(intent);
-            } catch (Exception e) {
-                Log.e("RestaurantAdapter", "Error while starting AddReviewActivity", e);
+            Intent intent = new Intent(context, AddReviewActivity.class);
+            intent.putExtra("restaurantId", restaurantWithPromotions.getRestaurant().getId());
+            context.startActivity(intent);
+        });
+
+        // Ustaw ikonę serca na podstawie stanu ulubionych
+        updateFavouriteIcon(holder, restaurantWithPromotions);
+
+        holder.btnFavourite.setOnClickListener(v -> {
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition == RecyclerView.NO_POSITION) return;
+
+            RestaurantWithPromotions currentRestaurant = data.get(currentPosition);
+            String token = "Bearer " + tokenManager.getToken();
+
+            boolean isCurrentlyFavourite = currentRestaurant.getRestaurant().isFavourite();
+            currentRestaurant.getRestaurant().setFavourite(!isCurrentlyFavourite);
+
+            if (isCurrentlyFavourite) {
+                apiService.deleteFavourite(token, currentRestaurant.getRestaurant().getId()).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Log.d("Adapter", "Usunięto z ulubionych: " + currentRestaurant.getRestaurant().getName());
+                            if (showingFavourites) {
+                                data.remove(currentPosition);
+                                notifyItemRemoved(currentPosition);
+                            } else {
+                                updateFavouriteIcon(holder, currentRestaurant);
+                            }
+                        } else {
+                            przywrocStan(holder, currentRestaurant, true);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        przywrocStan(holder, currentRestaurant, true);
+                    }
+                });
+            } else {
+                apiService.addFavourite(token, currentRestaurant.getRestaurant().getId()).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Log.d("Adapter", "Dodano do ulubionych: " + currentRestaurant.getRestaurant().getName());
+                            updateFavouriteIcon(holder, currentRestaurant);
+                        } else {
+                            przywrocStan(holder, currentRestaurant, false);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        przywrocStan(holder, currentRestaurant, false);
+                    }
+                });
             }
         });
+    }
+
+    private void updateFavouriteIcon(RestaurantViewHolder holder, RestaurantWithPromotions restaurant) {
+        boolean isFavourite = restaurant.getRestaurant().isFavourite();
+        holder.btnFavourite.setImageResource(isFavourite ? R.drawable.ic_heart_filled : R.drawable.ic_heart_outline);
+    }
+
+    private void przywrocStan(RestaurantViewHolder holder, RestaurantWithPromotions restaurant, boolean wasFavourite) {
+        restaurant.getRestaurant().setFavourite(wasFavourite);
+        updateFavouriteIcon(holder, restaurant);
     }
 
     @Override
@@ -97,10 +163,26 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
         return data.size();
     }
 
+    public void updateData(List<RestaurantWithPromotions> newData) {
+        // Zachowaj aktualny stan ulubionych
+        for (RestaurantWithPromotions newRestaurant : newData) {
+            for (RestaurantWithPromotions oldRestaurant : data) {
+                if (newRestaurant.getRestaurant().getId() == oldRestaurant.getRestaurant().getId()) {
+                    newRestaurant.getRestaurant().setFavourite(oldRestaurant.getRestaurant().isFavourite());
+                }
+            }
+        }
+
+        data.clear();
+        data.addAll(newData);
+        notifyDataSetChanged();
+    }
+
     static class RestaurantViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantCoordinates, tvRestaurantWebsite;
+        TextView tvRestaurantName, tvRestaurantDetails, tvRestaurantWebsite, tvRestaurantCoordinates;
         LinearLayout btnContainer;
         Button btnShowPromotions, btnShowReviews, btnAddReview;
+        ImageButton btnFavourite;
 
         public RestaurantViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +194,7 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
             btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);
             btnShowReviews = itemView.findViewById(R.id.btnShowReviews);
             btnAddReview = itemView.findViewById(R.id.btnAddReview);
+            btnFavourite = itemView.findViewById(R.id.btnFavourite);
         }
     }
 }

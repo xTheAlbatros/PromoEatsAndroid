@@ -14,10 +14,14 @@ public class Restaurant {
 
     private boolean isExpanded;
 
+    // Dodajemy nowe pole isFavourite
+    private boolean isFavourite;
+
     // Gettery i settery
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -25,6 +29,7 @@ public class Restaurant {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -32,6 +37,7 @@ public class Restaurant {
     public String getPhone() {
         return phone;
     }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -39,6 +45,7 @@ public class Restaurant {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -46,6 +53,7 @@ public class Restaurant {
     public String getWebsite() {
         return website;
     }
+
     public void setWebsite(String website) {
         this.website = website;
     }
@@ -53,6 +61,7 @@ public class Restaurant {
     public Location getLocation() {
         return location;
     }
+
     public void setLocation(Location location) {
         this.location = location;
     }
@@ -60,7 +69,17 @@ public class Restaurant {
     public boolean isExpanded() {
         return isExpanded;
     }
+
     public void setExpanded(boolean expanded) {
         isExpanded = expanded;
+    }
+
+    // Dodajemy getter i setter dla isFavourite
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 }

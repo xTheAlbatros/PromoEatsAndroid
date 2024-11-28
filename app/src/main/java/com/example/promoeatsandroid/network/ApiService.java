@@ -7,14 +7,15 @@ import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.Promotion;
 import com.example.promoeatsandroid.models.Review;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import java.util.List;
-
 
 public interface ApiService {
     @POST("api/auth/register")
@@ -37,4 +38,13 @@ public interface ApiService {
 
     @POST("api/restaurant/review")
     Call<Void> addReview(@Header("Authorization") String token, @Body Review review);
+
+    @GET("api/restaurant/favourites")
+    Call<List<Restaurant>> getFavourites(@Header("Authorization") String token);
+
+    @POST("api/restaurant/{id}/favourite")
+    Call<Void> addFavourite(@Header("Authorization") String token, @Path("id") int restaurantId);
+
+    @DELETE("api/restaurant/{id}/favourite")
+    Call<Void> deleteFavourite(@Header("Authorization") String token, @Path("id") int restaurantId);
 }
