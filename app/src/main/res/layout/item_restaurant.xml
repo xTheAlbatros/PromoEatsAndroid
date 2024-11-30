@@ -1,77 +1,113 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_margin="8dp"
+    android:padding="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <!-- Nazwa restauracji -->
-    <TextView
-        android:id="@+id/tvRestaurantName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Nazwa Restauracji" />
-
-    <!-- Szczegóły restauracji -->
-    <TextView
-        android:id="@+id/tvRestaurantDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Szczegóły Restauracji" />
-
-    <!-- Strona internetowa -->
-    <TextView
-        android:id="@+id/tvRestaurantWebsite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="Website: www.example.com" />
-
-    <!-- Koordynaty restauracji -->
-    <TextView
-        android:id="@+id/tvRestaurantCoordinates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:text="Koordynaty" />
-
-    <!-- Przycisk serca -->
-    <ImageButton
-        android:id="@+id/btnFavourite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_heart_outline"
-        android:contentDescription="Favourite button" />
-
-    <!-- Przyciski -->
     <LinearLayout
-        android:id="@+id/btnContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:paddingTop="8dp">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnShowPromotions"
-            android:layout_width="wrap_content"
+        <!-- Główna sekcja -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pokaż promocje" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <Button
-            android:id="@+id/btnShowReviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pokaż opinie"
-            android:layout_marginStart="16dp" />
+            <!-- Nazwa restauracji -->
+            <TextView
+                android:id="@+id/tvRestaurantName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Nazwa Restauracji"
+                android:textColor="@android:color/black" />
 
-        <Button
-            android:id="@+id/btnAddReview"
-            android:layout_width="wrap_content"
+            <!-- Przycisk ulubione -->
+            <ImageButton
+                android:id="@+id/btnFavourite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_heart_outline"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Favourite button"
+                app:tint="@android:color/holo_red_dark"
+                android:padding="4dp" />
+        </LinearLayout>
+
+        <!-- Szczegóły restauracji -->
+        <TextView
+            android:id="@+id/tvRestaurantDetails"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dodaj opinię"
-            android:layout_marginStart="16dp" />
+            android:textSize="14sp"
+            android:text="Telefon: 123456789"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp" />
+
+        <!-- Strona internetowa -->
+        <TextView
+            android:id="@+id/tvRestaurantWebsite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="Website: www.example.com"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginTop="2dp" />
+
+        <!-- Koordynaty -->
+        <TextView
+            android:id="@+id/tvRestaurantCoordinates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="Koordynaty: Lat: 0.0, Lon: 0.0"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="2dp" />
+
+        <!-- Dodatkowe przyciski -->
+        <LinearLayout
+            android:id="@+id/btnContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnShowPromotions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Promocje"
+                android:textSize="12sp"
+                android:paddingHorizontal="8dp" />
+
+            <Button
+                android:id="@+id/btnShowReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opinie"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp"
+                android:paddingHorizontal="8dp" />
+
+            <Button
+                android:id="@+id/btnAddReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dodaj opinię"
+                android:textSize="12sp"
+                android:layout_marginStart="8dp"
+                android:paddingHorizontal="8dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

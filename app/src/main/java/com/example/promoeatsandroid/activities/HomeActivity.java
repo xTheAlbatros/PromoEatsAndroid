@@ -73,9 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         // Odbierz obiekt RestaurantRequest z Intent
         RestaurantRequest restaurantRequest = (RestaurantRequest) getIntent().getSerializableExtra("restaurantRequest");
         if (restaurantRequest != null) {
-            // Wyświetl obiekt dla testów
             Toast.makeText(this, restaurantRequest.toString(), Toast.LENGTH_LONG).show();
-            // Możesz również wyświetlić w logach
             Log.d("HomeActivity", "Otrzymano RestaurantRequest: " + restaurantRequest);
         }
 
@@ -86,8 +84,8 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Pobierz ulubione i restauracje
-        fetchFavourites(() -> fetchRestaurants());
+        // Pobierz restauracje i ulubione
+        fetchRestaurantsAndFavourites();
     }
 
     @Override
@@ -127,7 +125,11 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchRestaurants() {
+    private void fetchRestaurantsAndFavourites() {
+        fetchFavourites(() -> fetchRestaurants(true));
+    }
+
+    private void fetchRestaurants(boolean updateFavourites) {
         String token = "Bearer " + tokenManager.getToken();
 
         apiService.getRestaurants(token).enqueue(new Callback<List<Restaurant>>() {
@@ -136,7 +138,9 @@ public class HomeActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<RestaurantWithPromotions> newData = new ArrayList<>();
                     for (Restaurant restaurant : response.body()) {
-                        restaurant.setFavourite(isFavourite(restaurant.getId()));
+                        if (updateFavourites) {
+                            restaurant.setFavourite(isFavourite(restaurant.getId()));
+                        }
                         newData.add(new RestaurantWithPromotions(restaurant, new ArrayList<>()));
                     }
                     adapter.updateData(newData);
@@ -161,15 +165,16 @@ public class HomeActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     favouriteRestaurants.clear();
                     favouriteRestaurants.addAll(response.body());
-                    if (callback != null) callback.run();
                 } else {
-                    Toast.makeText(HomeActivity.this, "Nie udało się załadować ulubionych restauracji.", Toast.LENGTH_SHORT).show();
+                    favouriteRestaurants.clear();
                 }
+                if (callback != null) callback.run();
             }
 
             @Override
             public void onFailure(Call<List<Restaurant>> call, Throwable t) {
-                Toast.makeText(HomeActivity.this, "Błąd sieci: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Błąd sieci podczas ładowania ulubionych: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                if (callback != null) callback.run();
             }
         });
     }
@@ -177,6 +182,7 @@ public class HomeActivity extends AppCompatActivity {
     private void toggleFavourites() {
         showingFavourites = !showingFavourites;
         btnToggleFavourites.setText(showingFavourites ? "Strona Główna" : "Ulubione");
+
         if (showingFavourites) {
             fetchFavourites(() -> {
                 List<RestaurantWithPromotions> favourites = new ArrayList<>();
@@ -186,7 +192,7 @@ public class HomeActivity extends AppCompatActivity {
                 adapter.updateData(favourites);
             });
         } else {
-            fetchRestaurants();
+            fetchRestaurants(false);
         }
     }
 
