@@ -4,35 +4,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:padding="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="12dp"
+    android:padding="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="#2A2A2A">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Główna sekcja -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
 
-            <!-- Nazwa restauracji -->
             <TextView
                 android:id="@+id/tvRestaurantName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:text="Nazwa Restauracji"
-                android:textColor="@android:color/black" />
+                android:textColor="#ffcc00"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
-            <!-- Przycisk ulubione -->
             <ImageButton
                 android:id="@+id/btnFavourite"
                 android:layout_width="48dp"
@@ -40,74 +42,82 @@
                 android:src="@drawable/ic_heart_outline"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Favourite button"
-                app:tint="@android:color/holo_red_dark"
-                android:padding="4dp" />
+                app:tint="#FF5252"
+                android:padding="8dp" />
         </LinearLayout>
 
-        <!-- Szczegóły restauracji -->
         <TextView
             android:id="@+id/tvRestaurantDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="16sp"
             android:text="Telefon: 123456789"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="4dp" />
+            android:textColor="#4FC3F7"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold" />
 
-        <!-- Strona internetowa -->
         <TextView
             android:id="@+id/tvRestaurantWebsite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:textSize="16sp"
             android:text="Website: www.example.com"
-            android:textColor="@android:color/holo_blue_dark"
-            android:layout_marginTop="2dp" />
+            android:textColor="#4FC3F7"
+            android:layout_marginTop="4dp"
+            android:autoLink="web"
+            android:textStyle="bold" />
 
-        <!-- Koordynaty -->
-        <TextView
-            android:id="@+id/tvRestaurantCoordinates"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="Koordynaty: Lat: 0.0, Lon: 0.0"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="2dp" />
-
-        <!-- Dodatkowe przyciski -->
         <LinearLayout
             android:id="@+id/btnContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="12dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:gravity="center">
 
             <Button
                 android:id="@+id/btnShowPromotions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#00C853"
                 android:text="Promocje"
-                android:textSize="12sp"
-                android:paddingHorizontal="8dp" />
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnShowReviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#FFD600"
                 android:text="Opinie"
-                android:textSize="12sp"
+                android:textColor="#000000"
+                android:textSize="14sp"
                 android:layout_marginStart="8dp"
-                android:paddingHorizontal="8dp" />
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnAddReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#51bcda"
                 android:text="Dodaj opinię"
-                android:textSize="12sp"
+                android:textColor="#000000"
+                android:textSize="14sp"
                 android:layout_marginStart="8dp"
-                android:paddingHorizontal="8dp" />
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

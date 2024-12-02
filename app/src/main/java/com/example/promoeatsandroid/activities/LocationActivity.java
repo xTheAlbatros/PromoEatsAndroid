@@ -80,7 +80,7 @@ public class LocationActivity extends AppCompatActivity {
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
                         autoLocation = new Location(latitude, longitude);
-                        tvAutoLocation.setText("Twoja lokalizacja:\nLat: " + latitude + ", Lon: " + longitude);
+                        tvAutoLocation.setText("Pobrano lokalizację!");
                     } else {
                         Toast.makeText(this, "Nie udało się uzyskać lokalizacji", Toast.LENGTH_SHORT).show();
                     }
@@ -114,7 +114,7 @@ public class LocationActivity extends AppCompatActivity {
                     manualLocation = new Location(latitude, longitude);
 
                     runOnUiThread(() -> {
-                        tvManualLocation.setText("Lokalizacja z adresu:\nLat: " + latitude + ", Lon: " + longitude);
+                        tvManualLocation.setText("Znaleziono lokalizację");
                     });
                 } else {
                     runOnUiThread(() -> {

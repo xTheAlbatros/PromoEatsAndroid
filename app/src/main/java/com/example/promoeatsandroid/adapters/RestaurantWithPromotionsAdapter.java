@@ -57,16 +57,16 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
         RestaurantWithPromotions restaurantWithPromotions = data.get(position);
 
         holder.tvRestaurantName.setText(restaurantWithPromotions.getRestaurant().getName());
-        holder.tvRestaurantDetails.setText("Phone: " + restaurantWithPromotions.getRestaurant().getPhone());
-        holder.tvRestaurantWebsite.setText("Website: " + restaurantWithPromotions.getRestaurant().getWebsite());
+        holder.tvRestaurantDetails.setText("Telefon: " + restaurantWithPromotions.getRestaurant().getPhone());
+        holder.tvRestaurantWebsite.setText("Strona: " + restaurantWithPromotions.getRestaurant().getWebsite());
 
-        if (restaurantWithPromotions.getRestaurant().getLocation() != null) {
-            double latitude = restaurantWithPromotions.getRestaurant().getLocation().getLatitude();
-            double longitude = restaurantWithPromotions.getRestaurant().getLocation().getLongitude();
-            holder.tvRestaurantCoordinates.setText("Lat: " + latitude + ", Lon: " + longitude);
-        } else {
-            holder.tvRestaurantCoordinates.setText("Brak danych lokalizacji");
-        }
+//        if (restaurantWithPromotions.getRestaurant().getLocation() != null) {
+//            double latitude = restaurantWithPromotions.getRestaurant().getLocation().getLatitude();
+//            double longitude = restaurantWithPromotions.getRestaurant().getLocation().getLongitude();
+//            holder.tvRestaurantCoordinates.setText("Lat: " + latitude + ", Lon: " + longitude);
+//        } else {
+//            holder.tvRestaurantCoordinates.setText("Brak danych lokalizacji");
+//        }
 
         holder.itemView.setOnClickListener(v -> {
             boolean expanded = restaurantWithPromotions.getRestaurant().isExpanded();
@@ -189,7 +189,7 @@ public class RestaurantWithPromotionsAdapter extends RecyclerView.Adapter<Restau
             tvRestaurantName = itemView.findViewById(R.id.tvRestaurantName);
             tvRestaurantDetails = itemView.findViewById(R.id.tvRestaurantDetails);
             tvRestaurantWebsite = itemView.findViewById(R.id.tvRestaurantWebsite);
-            tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
+            //tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
             btnContainer = itemView.findViewById(R.id.btnContainer);
             btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);
             btnShowReviews = itemView.findViewById(R.id.btnShowReviews);
