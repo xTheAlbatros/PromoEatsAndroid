@@ -2,8 +2,9 @@ package com.example.promoeatsandroid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,6 +44,13 @@ public class PromotionsActivity extends AppCompatActivity {
         tokenManager = new TokenManager(this);
 
         int restaurantId = getIntent().getIntExtra("restaurantId", -1);
+
+        if (restaurantId == -1) {
+            Toast.makeText(this, "Nieprawidłowe dane restauracji", Toast.LENGTH_SHORT).show();
+            finish(); // Zakończ aktywność, jeśli brak danych restauracji
+            return;
+        }
+
         fetchPromotions(restaurantId);
     }
 
@@ -54,16 +62,21 @@ public class PromotionsActivity extends AppCompatActivity {
             public void onResponse(Call<List<Promotion>> call, Response<List<Promotion>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Promotion> promotions = response.body();
+                    if (promotions.isEmpty()) {
+                        Toast.makeText(PromotionsActivity.this, "Brak promocji dla tej restauracji", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     adapter = new PromotionAdapter(promotions, PromotionsActivity.this::fetchAndShowImages);
                     rvPromotions.setAdapter(adapter);
                 } else {
-                    Toast.makeText(PromotionsActivity.this, "Nie udało się pobrać promocji", Toast.LENGTH_SHORT).show();
+                    showErrorToast("Nie udało się pobrać promocji. Spróbuj ponownie później.");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Promotion>> call, Throwable t) {
-                Toast.makeText(PromotionsActivity.this, "Błąd sieci: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                showErrorToast("Błąd sieci: " + t.getMessage());
             }
         });
     }
@@ -77,9 +90,7 @@ public class PromotionsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Images> images = response.body();
                     Log.d("PromotionsActivity", "Liczba zdjęć: " + images.size());
-                    for (Images image : images) {
-                        Log.d("PromotionsActivity", "Zdjęcie: " + image.getPath());
-                    }
+
                     if (!images.isEmpty()) {
                         Intent intent = new Intent(PromotionsActivity.this, ImageViewerActivity.class);
                         ArrayList<String> imageUrls = extractPaths(images);
@@ -89,15 +100,13 @@ public class PromotionsActivity extends AppCompatActivity {
                         Toast.makeText(PromotionsActivity.this, "Brak zdjęć dla tej promocji", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.e("PromotionsActivity", "Nieudane żądanie: " + response.errorBody());
-                    Toast.makeText(PromotionsActivity.this, "Błąd pobierania zdjęć", Toast.LENGTH_SHORT).show();
+                    showErrorToast("Nie udało się pobrać zdjęć.");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Images>> call, Throwable t) {
-                Log.e("PromotionsActivity", "Błąd sieci: " + t.getMessage());
-                Toast.makeText(PromotionsActivity.this, "Błąd sieci", Toast.LENGTH_SHORT).show();
+                showErrorToast("Błąd sieci: " + t.getMessage());
             }
         });
     }
@@ -110,4 +119,7 @@ public class PromotionsActivity extends AppCompatActivity {
         return paths;
     }
 
+    private void showErrorToast(String message) {
+        Toast.makeText(PromotionsActivity.this, message, Toast.LENGTH_SHORT).show();
+    }
 }

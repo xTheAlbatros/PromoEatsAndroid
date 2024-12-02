@@ -11,11 +11,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.promoeatsandroid.R;
 import com.example.promoeatsandroid.models.Promotion;
+import com.example.promoeatsandroid.models.Images;
+import com.example.promoeatsandroid.network.ApiService;
+import com.example.promoeatsandroid.network.RetrofitClient;
+import com.example.promoeatsandroid.utils.TokenManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.PromotionViewHolder> {
 
@@ -42,18 +50,48 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.Prom
         holder.tvPromotionDescription.setText(promotion.getDescription());
         holder.tvPromotionDates.setText(formatDates(promotion.getStartTime(), promotion.getEndTime()));
 
-        // Sprawdzenie, czy ID jest większe od zera
-        if (promotion.getId() > 0) {
-            holder.btnShowImages.setVisibility(View.VISIBLE);
-            holder.btnShowImages.setOnClickListener(v -> {
-                if (onShowImagesClickListener != null) {
-                    onShowImagesClickListener.onShowImagesClick(promotion.getId());
+        // Domyślnie ukryj przycisk
+        holder.btnShowImages.setVisibility(View.GONE);
+
+        // Sprawdzanie dostępności zdjęć
+        TokenManager tokenManager = new TokenManager(holder.itemView.getContext());
+        String token = "Bearer " + tokenManager.getToken();
+        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+
+        apiService.getImagesForPromotion(token, promotion.getId()).enqueue(new Callback<List<Images>>() {
+            @Override
+            public void onResponse(Call<List<Images>> call, Response<List<Images>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Images> images = response.body();
+
+                    // Filtrujemy tylko zdjęcia z poprawnymi URL
+                    boolean hasValidImages = images.stream().anyMatch(image -> image.getPath() != null && !image.getPath().isEmpty());
+
+                    if (hasValidImages) {
+                        holder.btnShowImages.setVisibility(View.VISIBLE);
+                        holder.btnShowImages.setOnClickListener(v -> {
+                            if (onShowImagesClickListener != null) {
+                                onShowImagesClickListener.onShowImagesClick(promotion.getId());
+                            }
+                        });
+                    } else {
+                        // Brak zdjęć - ukryj przycisk
+                        holder.btnShowImages.setVisibility(View.GONE);
+                    }
+                } else {
+                    // Odpowiedź serwera nie jest prawidłowa - ukryj przycisk
+                    holder.btnShowImages.setVisibility(View.GONE);
                 }
-            });
-        } else {
-            holder.btnShowImages.setVisibility(View.GONE);
-        }
+            }
+
+            @Override
+            public void onFailure(Call<List<Images>> call, Throwable t) {
+                // W razie błędu ukryj przycisk
+                holder.btnShowImages.setVisibility(View.GONE);
+            }
+        });
     }
+
 
 
     @Override

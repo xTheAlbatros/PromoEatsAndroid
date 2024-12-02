@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.util.Log;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,17 +37,18 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         if (imageUrls == null || imageUrls.isEmpty()) {
             Toast.makeText(this, "Brak zdjęć do wyświetlenia", Toast.LENGTH_SHORT).show();
-            finish();
+            btnClose.setVisibility(View.GONE); // Ukryj przycisk
             return;
+        } else {
+            btnClose.setVisibility(View.VISIBLE); // Pokaż przycisk, gdy są zdjęcia
         }
 
         // Skonfiguruj RecyclerView
-        rvImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         ImageAdapter adapter = new ImageAdapter(this, imageUrls);
         rvImages.setAdapter(adapter);
 
         // Zamknij aktywność
         btnClose.setOnClickListener(v -> finish());
     }
-
 }
