@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">PromoEatsAndroid</string>
     <string name="image_description">Obraz promocji</string>
+    <string name="logo_description">Logo PromoEats</string>
 </resources>

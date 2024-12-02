@@ -4,5 +4,6 @@
         android:id="@+id/action_logout"
         android:title="Wyloguj się"
         android:orderInCategory="100"
-        android:showAsAction="never" />
+        android:showAsAction="always"
+        android:tint="#00C853" />
 </menu>

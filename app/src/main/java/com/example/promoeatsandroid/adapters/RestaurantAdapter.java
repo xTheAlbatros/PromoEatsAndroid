@@ -42,8 +42,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
         Restaurant restaurant = restaurantList.get(position);
 
         holder.tvRestaurantName.setText(restaurant.getName());
-        holder.tvRestaurantDetails.setText("Phone: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
-        holder.tvRestaurantWebsite.setText("Website: " + restaurant.getWebsite());
+        holder.tvRestaurantDetails.setText("Telefon: " + restaurant.getPhone() + " | Email: " + restaurant.getEmail());
+        holder.tvRestaurantWebsite.setText("Strona: " + restaurant.getWebsite());
 
         if (restaurant.getLocation() != null) {
             String coordinates = "Lat: " + restaurant.getLocation().getLatitude() +
@@ -87,7 +87,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             tvRestaurantName = itemView.findViewById(R.id.tvRestaurantName);
             tvRestaurantDetails = itemView.findViewById(R.id.tvRestaurantDetails);
             tvRestaurantWebsite = itemView.findViewById(R.id.tvRestaurantWebsite);
-            tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
+            //tvRestaurantCoordinates = itemView.findViewById(R.id.tvRestaurantCoordinates);
             btnContainer = itemView.findViewById(R.id.btnContainer);
             btnShowPromotions = itemView.findViewById(R.id.btnShowPromotions);
             btnShowReviews = itemView.findViewById(R.id.btnShowReviews);

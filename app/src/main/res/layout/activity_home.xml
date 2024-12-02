@@ -1,41 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".activities.HomeActivity">
+    android:background="#1C1C1C"
+    android:orientation="vertical">
 
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_height="96dp"
+        android:background="#2F2F2F"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
-    <!-- Przycisk do przejścia do LocationActivity -->
+        <!-- Logo wyśrodkowane -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/toolbarLogo"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/ic_promo_eats_logo"
+                android:contentDescription="Logo PromoEats" />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Przycisk do przełączania ulubionych -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_marginTop="16dp">
 
         <Button
             android:id="@+id/btnLocationActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lokalizacja" />
+            android:backgroundTint="#00C853"
+            android:text="Lokalizacja"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp" />
 
         <Button
             android:id="@+id/btnToggleFavourites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ulubione" />
+            android:backgroundTint="#FFD600"
+            android:text="Ulubione"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp" />
     </LinearLayout>
 
-    <!-- RecyclerView do wyświetlania restauracji z promocjami -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRestaurantsWithPromotions"
         android:layout_width="match_parent"

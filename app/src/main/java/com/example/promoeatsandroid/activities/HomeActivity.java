@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ImageView;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,9 +52,16 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Konfiguracja toolbaru i API
+        // Konfiguracja Toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        ImageView toolbarLogo = findViewById(R.id.toolbarLogo);
+        toolbarLogo.setImageResource(R.drawable.ic_promo_eats_logo);
 
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
         tokenManager = new TokenManager(getApplicationContext());
