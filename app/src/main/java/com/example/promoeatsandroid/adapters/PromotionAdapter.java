@@ -3,6 +3,7 @@ package com.example.promoeatsandroid.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,15 +16,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import android.util.Log;
-
 
 public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.PromotionViewHolder> {
 
-    private List<Promotion> promotionList;
+    private final List<Promotion> promotionList;
+    private final OnShowImagesClickListener onShowImagesClickListener;
 
-    public PromotionAdapter(List<Promotion> promotionList) {
+    public PromotionAdapter(List<Promotion> promotionList, OnShowImagesClickListener onShowImagesClickListener) {
         this.promotionList = promotionList;
+        this.onShowImagesClickListener = onShowImagesClickListener;
     }
 
     @NonNull
@@ -40,7 +41,20 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.Prom
 
         holder.tvPromotionDescription.setText(promotion.getDescription());
         holder.tvPromotionDates.setText(formatDates(promotion.getStartTime(), promotion.getEndTime()));
+
+        // Sprawdzenie, czy ID jest większe od zera
+        if (promotion.getId() > 0) {
+            holder.btnShowImages.setVisibility(View.VISIBLE);
+            holder.btnShowImages.setOnClickListener(v -> {
+                if (onShowImagesClickListener != null) {
+                    onShowImagesClickListener.onShowImagesClick(promotion.getId());
+                }
+            });
+        } else {
+            holder.btnShowImages.setVisibility(View.GONE);
+        }
     }
+
 
     @Override
     public int getItemCount() {
@@ -49,7 +63,6 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.Prom
 
     private String formatDates(String startTime, String endTime) {
         try {
-            // Użyj SimpleDateFormat do parsowania i formatowania dat
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
             SimpleDateFormat outputFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
 
@@ -68,11 +81,17 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.Prom
 
     public static class PromotionViewHolder extends RecyclerView.ViewHolder {
         TextView tvPromotionDescription, tvPromotionDates;
+        Button btnShowImages;
 
         public PromotionViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPromotionDescription = itemView.findViewById(R.id.tvPromotionDescription);
             tvPromotionDates = itemView.findViewById(R.id.tvPromotionDates);
+            btnShowImages = itemView.findViewById(R.id.btnShowImages);
         }
+    }
+
+    public interface OnShowImagesClickListener {
+        void onShowImagesClick(int promotionId);
     }
 }

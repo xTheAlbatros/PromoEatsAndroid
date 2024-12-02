@@ -5,17 +5,30 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+    <!-- Opis promocji -->
     <TextView
         android:id="@+id/tvPromotionDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:text="Opis promocji" />
 
+    <!-- Daty promocji -->
     <TextView
         android:id="@+id/tvPromotionDates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:paddingTop="4dp" />
+        android:paddingTop="4dp"
+        android:text="Daty promocji" />
+
+    <!-- Przycisk do wyświetlenia zdjęć -->
+    <Button
+        android:id="@+id/btnShowImages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pokaż zdjęcia"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
 </LinearLayout>

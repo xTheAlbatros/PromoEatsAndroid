@@ -6,6 +6,7 @@ import com.example.promoeatsandroid.models.User;
 import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.Promotion;
 import com.example.promoeatsandroid.models.Review;
+import com.example.promoeatsandroid.models.Images;
 
 import java.util.List;
 
@@ -47,4 +48,8 @@ public interface ApiService {
 
     @DELETE("api/restaurant/{id}/favourite")
     Call<Void> deleteFavourite(@Header("Authorization") String token, @Path("id") int restaurantId);
+
+    @GET("api/promotion/{id}/images")
+    Call<List<Images>> getImagesForPromotion(@Header("Authorization") String token, @Path("id") int promotionId
+    );
 }
