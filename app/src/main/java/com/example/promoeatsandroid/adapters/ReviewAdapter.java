@@ -3,6 +3,7 @@ package com.example.promoeatsandroid.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,8 +32,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     @Override
     public void onBindViewHolder(@NonNull ReviewViewHolder holder, int position) {
         Review review = reviews.get(position);
-        holder.tvRate.setText("Ocena: " + review.getRate());
+
+        // Ustaw ocenę w RatingBar
+        holder.ratingBar.setRating(review.getRate());
+
+        // Ustaw komentarz
         holder.tvComment.setText(review.getComment());
+
+        // Ustaw datę
         holder.tvDate.setText(review.getCreatedTime());
     }
 
@@ -42,11 +49,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     }
 
     static class ReviewViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRate, tvComment, tvDate;
+        RatingBar ratingBar;
+        TextView tvComment, tvDate;
 
         public ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvRate = itemView.findViewById(R.id.tvRate);
+
+            // Powiąż widoki
+            ratingBar = itemView.findViewById(R.id.rbRate);
             tvComment = itemView.findViewById(R.id.tvComment);
             tvDate = itemView.findViewById(R.id.tvDate);
         }

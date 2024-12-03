@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_logout"
-        android:title="Wyloguj się"
+        android:title="Wyloguj"
         android:orderInCategory="100"
-        android:showAsAction="always"
         android:tint="#00C853" />
 </menu>

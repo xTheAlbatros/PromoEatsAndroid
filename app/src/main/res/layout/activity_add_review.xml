@@ -1,30 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="#1C1C1C"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etRate"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ocena (1-5)"
-        android:inputType="number"
-        android:imeOptions="actionDone" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etComment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Komentarz"
-        android:inputType="text" />
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_promo_eats_logo"
+            android:contentDescription="@string/logo_description"
+            android:layout_gravity="center" />
 
-    <Button
-        android:id="@+id/btnSubmitReview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dodaj opinię"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-</LinearLayout>
+        <!-- Main Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DODAJ OPINIĘ"
+            android:textColor="#FFFF00"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp" />
+
+        <!-- Ocena -->
+        <EditText
+            android:id="@+id/etRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ocena (1-5)"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC" />
+
+        <!-- Komentarz -->
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Komentarz"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:inputType="text"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/btnSubmitReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#00C853"
+            android:textStyle="bold"
+            android:text="Dodaj opinię"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp" />
+    </LinearLayout>
+</ScrollView>

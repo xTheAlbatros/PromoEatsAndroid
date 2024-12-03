@@ -1,34 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_margin="12dp"
+    android:padding="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="#2A2A2A">
 
-    <!-- Opis promocji -->
-    <TextView
-        android:id="@+id/tvPromotionDescription"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="Opis promocji" />
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:gravity="center_horizontal">
 
-    <!-- Daty promocji -->
-    <TextView
-        android:id="@+id/tvPromotionDates"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:paddingTop="4dp"
-        android:text="Daty promocji" />
+        <TextView
+            android:id="@+id/tvPromotionDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Opis promocji"
+            android:textColor="#FFD600"
+            android:layout_marginBottom="8dp" />
 
-    <!-- Przycisk do wyświetlenia zdjęć -->
-    <Button
-        android:id="@+id/btnShowImages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pokaż zdjęcia"
-        android:layout_marginTop="8dp"
-        android:visibility="gone" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/tvPromotionDates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Daty promocji: 01.01.2024 - 31.01.2024"
+            android:textColor="#4FC3F7"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnShowImages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#00C853"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Zdjęcia"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:minWidth="80dp"
+            android:minHeight="36dp"
+            android:visibility="visible" />
+
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
