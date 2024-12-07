@@ -30,7 +30,7 @@
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Sekcja z przyciskami -->
+    <!-- Sekcja z przyciskami Lokacja i Ulubione -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,6 +61,32 @@
             android:textAllCaps="false"
             android:padding="12dp" />
     </LinearLayout>
+
+    <!-- Nagłówek: Wybierz kategorie -->
+    <TextView
+        android:id="@+id/tvCategoriesHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wybierz kategorie"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp" />
+
+    <!-- Poziomy pasek kategorii -->
+    <HorizontalScrollView
+        android:id="@+id/hsvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:scrollbars="horizontal">
+
+        <LinearLayout
+            android:id="@+id/llCategoriesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
 
     <!-- Tekst wyświetlany jeśli nie ma wybranej lokalizacji -->
     <TextView

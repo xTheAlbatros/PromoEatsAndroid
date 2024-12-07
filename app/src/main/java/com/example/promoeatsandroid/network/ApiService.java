@@ -1,6 +1,7 @@
 package com.example.promoeatsandroid.network;
 
 import com.example.promoeatsandroid.models.AuthResponse;
+import com.example.promoeatsandroid.models.Category;
 import com.example.promoeatsandroid.models.LoginRequest;
 import com.example.promoeatsandroid.models.User;
 import com.example.promoeatsandroid.models.Restaurant;
@@ -54,7 +55,7 @@ public interface ApiService {
     Call<List<Images>> getImagesForPromotion(@Header("Authorization") String token, @Path("id") int promotionId
     );
 
-    @GET("api/restaurants/location/categories")
+    @POST("api/restaurants/location/categories")
     Call<List<Restaurant>> getRestaurantRestaurantsByLocationAndCategories(
             @Header("Authorization") String token,
             @Query("latitude") double latitude,
@@ -70,5 +71,8 @@ public interface ApiService {
             @Query("longitude") double longitude,
             @Query("range") int range
     );
+
+    @GET("api/categories")
+    Call<List<Category>> getAllCategories(@Header("Authorization") String token);
 
 }
