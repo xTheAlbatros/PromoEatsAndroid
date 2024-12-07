@@ -8,7 +8,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ImageView;
-
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,12 +41,16 @@ public class HomeActivity extends AppCompatActivity {
 
     private Button btnToggleFavourites;
     private RecyclerView rvRestaurants;
+    private TextView tvNoLocationInfo; // Tekst informujący o konieczności ustawienia lokalizacji
+    private Button btnLocationActivity; // Przycisk do przejścia do ustalania lokalizacji
 
     private List<RestaurantWithPromotions> restaurantWithPromotionsList;
     private List<Restaurant> favouriteRestaurants;
     private RestaurantWithPromotionsAdapter adapter;
 
     private boolean showingFavourites = false;
+
+    private RestaurantRequest restaurantRequest; // obiekt przekazany z LocationActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,8 @@ public class HomeActivity extends AppCompatActivity {
         // Inicjalizacja widoków
         btnToggleFavourites = findViewById(R.id.btnToggleFavourites);
         rvRestaurants = findViewById(R.id.rvRestaurantsWithPromotions);
-        Button btnLocationActivity = findViewById(R.id.btnLocationActivity);
+        btnLocationActivity = findViewById(R.id.btnLocationActivity);
+        tvNoLocationInfo = findViewById(R.id.tvNoLocationInfo);
 
         rvRestaurants.setLayoutManager(new LinearLayoutManager(this));
 
@@ -80,11 +86,7 @@ public class HomeActivity extends AppCompatActivity {
         rvRestaurants.setAdapter(adapter);
 
         // Odbierz obiekt RestaurantRequest z Intent
-        RestaurantRequest restaurantRequest = (RestaurantRequest) getIntent().getSerializableExtra("restaurantRequest");
-        if (restaurantRequest != null) {
-            Toast.makeText(this, restaurantRequest.toString(), Toast.LENGTH_LONG).show();
-            Log.d("HomeActivity", "Otrzymano RestaurantRequest: " + restaurantRequest);
-        }
+        restaurantRequest = (RestaurantRequest) getIntent().getSerializableExtra("restaurantRequest");
 
         // Słuchacze przycisków
         btnToggleFavourites.setOnClickListener(v -> toggleFavourites());
@@ -93,8 +95,26 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Pobierz restauracje i ulubione
-        fetchRestaurantsAndFavourites();
+        // Sprawdzamy czy mamy RestaurantRequest
+        if (restaurantRequest == null) {
+            // Brak wybranej lokalizacji - wyświetlamy info i ukrywamy listę
+            rvRestaurants.setVisibility(View.GONE);
+            btnToggleFavourites.setVisibility(View.GONE);
+            tvNoLocationInfo.setVisibility(View.VISIBLE);
+        } else {
+            // Jest lokalizacja - pobieramy restauracje z uwzględnieniem lokalizacji
+            tvNoLocationInfo.setVisibility(View.GONE);
+            rvRestaurants.setVisibility(View.VISIBLE);
+            btnToggleFavourites.setVisibility(View.VISIBLE);
+
+            if (restaurantRequest != null) {
+                Toast.makeText(this, restaurantRequest.toString(), Toast.LENGTH_LONG).show();
+                Log.d("HomeActivity", "Otrzymano RestaurantRequest: " + restaurantRequest);
+            }
+
+            // Pobierz restauracje i ulubione
+            fetchRestaurantsAndFavouritesWithLocation();
+        }
     }
 
     @Override
@@ -134,14 +154,19 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchRestaurantsAndFavourites() {
-        fetchFavourites(() -> fetchRestaurants(true));
+    private void fetchRestaurantsAndFavouritesWithLocation() {
+        fetchFavourites(() -> fetchRestaurantsWithLocation(true));
     }
 
-    private void fetchRestaurants(boolean updateFavourites) {
-        String token = "Bearer " + tokenManager.getToken();
+    private void fetchRestaurantsWithLocation(boolean updateFavourites) {
+        if (restaurantRequest == null) return;
 
-        apiService.getRestaurants(token).enqueue(new Callback<List<Restaurant>>() {
+        String token = "Bearer " + tokenManager.getToken();
+        double latitude = restaurantRequest.getLocation().getLatitude();
+        double longitude = restaurantRequest.getLocation().getLongitude();
+        int range = restaurantRequest.getRange();
+
+        apiService.getRestaurantRestaurantsByLocation(token, latitude, longitude, range).enqueue(new Callback<List<Restaurant>>() {
             @Override
             public void onResponse(Call<List<Restaurant>> call, Response<List<Restaurant>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -150,6 +175,7 @@ public class HomeActivity extends AppCompatActivity {
                         if (updateFavourites) {
                             restaurant.setFavourite(isFavourite(restaurant.getId()));
                         }
+                        // Tworzymy obiekt RestaurantWithPromotions z pustą listą promocji
                         newData.add(new RestaurantWithPromotions(restaurant, new ArrayList<>()));
                     }
                     adapter.updateData(newData);
@@ -164,6 +190,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void fetchFavourites(Runnable callback) {
         String token = "Bearer " + tokenManager.getToken();
@@ -201,7 +228,10 @@ public class HomeActivity extends AppCompatActivity {
                 adapter.updateData(favourites);
             });
         } else {
-            fetchRestaurants(false);
+            // Po powrocie z ulubionych na stronę główną wczytujemy restauracje z lokalizacją
+            if (restaurantRequest != null) {
+                fetchRestaurantsWithLocation(false);
+            }
         }
     }
 

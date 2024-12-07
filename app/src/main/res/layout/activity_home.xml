@@ -30,7 +30,7 @@
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Przycisk do przełączania ulubionych -->
+    <!-- Sekcja z przyciskami -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,6 +61,18 @@
             android:textAllCaps="false"
             android:padding="12dp" />
     </LinearLayout>
+
+    <!-- Tekst wyświetlany jeśli nie ma wybranej lokalizacji -->
+    <TextView
+        android:id="@+id/tvNoLocationInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Proszę przejść do Lokalizacji i ustawić lokalizację."
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:visibility="gone"
+        android:textSize="18sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRestaurantsWithPromotions"

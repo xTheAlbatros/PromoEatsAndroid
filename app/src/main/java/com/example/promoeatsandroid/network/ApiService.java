@@ -17,6 +17,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
     @POST("api/auth/register")
@@ -52,4 +53,22 @@ public interface ApiService {
     @GET("api/promotion/{id}/images")
     Call<List<Images>> getImagesForPromotion(@Header("Authorization") String token, @Path("id") int promotionId
     );
+
+    @GET("api/restaurants/location/categories")
+    Call<List<Restaurant>> getRestaurantRestaurantsByLocationAndCategories(
+            @Header("Authorization") String token,
+            @Query("latitude") double latitude,
+            @Query("longitude") double longitude,
+            @Query("range") int range,
+            @Body List<String> categories
+    );
+
+    @GET("api/restaurants/location")
+    Call<List<Restaurant>> getRestaurantRestaurantsByLocation(
+            @Header("Authorization") String token,
+            @Query("latitude") double latitude,
+            @Query("longitude") double longitude,
+            @Query("range") int range
+    );
+
 }
