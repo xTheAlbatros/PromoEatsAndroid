@@ -2,4 +2,6 @@
     <string name="app_name">PromoEatsAndroid</string>
     <string name="image_description">Obraz promocji</string>
     <string name="logo_description">Logo PromoEats</string>
+    <string name="back">Powrót</string>
+    <string name="avatar">Avatar użytkownika</string>
 </resources>
