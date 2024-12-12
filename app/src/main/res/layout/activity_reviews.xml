@@ -6,16 +6,38 @@
     android:background="#1C1C1C"
     android:padding="16dp">
 
-    <!-- Nagłówek -->
+    <!-- Back button -->
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back"
+        android:contentDescription="Powrót"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Average rating -->
     <TextView
+        android:id="@+id/tvAverageRating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OPINIE UŻYTKOWNIKÓW"
-        android:textColor="#00C853"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
         android:gravity="center"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <!-- Message for no reviews -->
+    <TextView
+        android:id="@+id/tvNoReviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FF5722"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        android:text="Ta restauracja nie ma jeszcze opinii." />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

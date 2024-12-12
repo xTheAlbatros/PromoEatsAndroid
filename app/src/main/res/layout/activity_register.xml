@@ -91,17 +91,6 @@
             android:textColor="#FFFFFF"
             android:textColorHint="#CCCCCC" />
 
-        <EditText
-            android:id="@+id/etConfirmPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Potwierdź hasło"
-            android:background="@drawable/rounded_edit_text"
-            android:padding="12dp"
-            android:layout_marginTop="16dp"
-            android:inputType="textPassword"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#CCCCCC" />
 
         <Button
             android:id="@+id/btnRegister"

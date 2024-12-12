@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.promoeatsandroid.R;
 import com.example.promoeatsandroid.models.Review;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
@@ -39,13 +42,27 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         // Ustaw komentarz
         holder.tvComment.setText(review.getComment());
 
-        // Ustaw datę
-        holder.tvDate.setText(review.getCreatedTime());
+        // Sformatuj i ustaw datę
+        holder.tvDate.setText(formatDate(review.getCreatedTime()));
     }
 
     @Override
     public int getItemCount() {
         return reviews.size();
+    }
+
+    private String formatDate(String rawDate) {
+        try {
+            // Wejściowy format daty
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+            // Wyjściowy format daty
+            SimpleDateFormat outputFormat = new SimpleDateFormat("d MMMM yyyy, HH:mm", new Locale("pl", "PL"));
+            Date date = inputFormat.parse(rawDate);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Nieznana data";
+        }
     }
 
     static class ReviewViewHolder extends RecyclerView.ViewHolder {

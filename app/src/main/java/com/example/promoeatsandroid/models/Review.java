@@ -9,7 +9,7 @@ public class Review {
     @SerializedName("restaurants")
     private Restaurant restaurant;
 
-    @SerializedName("created_time")
+
     private String createdTime;
 
     public Review(int rate, String comment, Restaurant restaurant) {
