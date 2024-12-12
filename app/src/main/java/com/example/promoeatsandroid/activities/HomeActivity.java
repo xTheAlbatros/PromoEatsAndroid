@@ -147,14 +147,14 @@ public class HomeActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_logout) {
             logout();
             return true;
-        } else if (item.getItemId() == R.id.action_profile) {
-            // Przejdź do widoku profilu
-            Intent intent = new Intent(this, ProfileActivity.class);
+        } else if (item.getItemId() == R.id.action_profile) { // Obsługa przejścia do profilu
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
             startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 
     private void logout() {

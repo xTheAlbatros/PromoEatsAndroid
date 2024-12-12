@@ -37,6 +37,7 @@
             android:exported="true">
         </activity>
         <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.ResetPasswordActivity" />
 
     </application>
 

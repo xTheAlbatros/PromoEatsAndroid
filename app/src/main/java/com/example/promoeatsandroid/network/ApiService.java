@@ -8,6 +8,7 @@ import com.example.promoeatsandroid.models.Restaurant;
 import com.example.promoeatsandroid.models.Promotion;
 import com.example.promoeatsandroid.models.Review;
 import com.example.promoeatsandroid.models.Images;
+import com.example.promoeatsandroid.models.ChangePasswordRequest;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.PATCH;
 
 public interface ApiService {
     @POST("api/auth/register")
@@ -74,5 +76,17 @@ public interface ApiService {
 
     @GET("api/categories")
     Call<List<Category>> getAllCategories(@Header("Authorization") String token);
+
+    @GET("api/user/token")
+    Call<User> getUserByToken(@Header("Authorization") String token);
+
+    @PATCH("/api/user/new-password")
+    Call<Void> changePassword(
+            @Header("Authorization") String token,
+            @Body ChangePasswordRequest request
+    );
+
+
+
 
 }
