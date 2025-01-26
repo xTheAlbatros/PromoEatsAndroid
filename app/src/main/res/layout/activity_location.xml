@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1C1C1C"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <!-- Nagłówek -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wybierz swoją lokalizację"
+            android:textColor="#FFFF00"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Opcja 1: Pobierz lokalizację automatycznie -->
+        <TextView
+            android:id="@+id/tvOption1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. Pobierz lokalizację automatycznie"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnGetLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00C853"
+            android:text="Pobierz Lokalizację"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tvAutoLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Automatyczna lokalizacja"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Opcja 2: Wprowadź lokalizację samemu -->
+        <TextView
+            android:id="@+id/tvOption2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. Wprowadź lokalizację samemu"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wprowadź adres"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btnGetLocationFromAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00C853"
+            android:text="Znajdź Lokalizację"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tvManualLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lokalizacja z adresu"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Wprowadzenie zakresu wyszukiwania -->
+        <TextView
+            android:id="@+id/tvRangePrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Podaj zakres wyszukiwania w km"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/etRange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Zakres w km"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:inputType="number"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Przycisk do wyszukania restauracji -->
+        <Button
+            android:id="@+id/btnSearchRestaurants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FFD600"
+            android:text="Wyszukaj Restauracje!"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Przycisk do powrotu do HomeActivity -->
+        <Button
+            android:id="@+id/btnGoHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#f5593d"
+            android:text="Anuluj"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp" />
+    </LinearLayout>
+</ScrollView>

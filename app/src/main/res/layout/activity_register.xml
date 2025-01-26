@@ -2,50 +2,126 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1C1C1C"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:gravity="center"
-        android:orientation="vertical">
+        android:padding="16dp">
 
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_promo_eats_logo"
+            android:contentDescription="@string/logo_description"
+            android:layout_gravity="center" />
+
+        <!-- Main Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Promocje gastronomiczne\nz całej Polski w jednym miejscu"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DOŁĄCZ JUŻ DZIŚ!"
+            android:textColor="#FFFF00"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp" />
+
+        <!-- Form -->
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Imię" />
+            android:hint="Nazwa użytkownika"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="24dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC" />
 
         <EditText
             android:id="@+id/etSurname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nazwisko" />
+            android:hint="Nazwisko"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC" />
 
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:hint="Adres e-mail"
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:inputType="textEmailAddress"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Hasło"
-            android:inputType="textPassword" />
+            android:background="@drawable/rounded_edit_text"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#CCCCCC" />
+
 
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Zarejestruj się" />
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#00C853"
+            android:text="Utwórz konto"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Masz już konto?"
+            android:textColor="#CCCCCC"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_marginTop="24dp" />
 
         <Button
             android:id="@+id/btnGoToLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logowanie" />
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FFD600"
+            android:text="Zaloguj się"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:padding="12dp" />
     </LinearLayout>
 </ScrollView>

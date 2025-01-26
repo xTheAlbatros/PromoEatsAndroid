@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ZALOGUJ SIĘ"
+            android:text="DODAJ OPINIĘ"
             android:textColor="#FFFF00"
             android:textSize="20sp"
             android:fontFamily="sans-serif-medium"
@@ -33,61 +33,42 @@
             android:layout_gravity="center"
             android:layout_marginTop="24dp" />
 
-        <!-- Form -->
+        <!-- Ocena -->
         <EditText
-            android:id="@+id/etEmail"
+            android:id="@+id/etRate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Adres e-mail"
+            android:hint="Ocena (1-5)"
             android:background="@drawable/rounded_edit_text"
             android:padding="12dp"
             android:layout_marginTop="16dp"
-            android:inputType="textEmailAddress"
+            android:inputType="number"
+            android:imeOptions="actionDone"
             android:textColor="#FFFFFF"
             android:textColorHint="#CCCCCC" />
 
+        <!-- Komentarz -->
         <EditText
-            android:id="@+id/etPassword"
+            android:id="@+id/etComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Hasło"
+            android:hint="Komentarz"
             android:background="@drawable/rounded_edit_text"
             android:padding="12dp"
             android:layout_marginTop="16dp"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:textColor="#FFFFFF"
             android:textColorHint="#CCCCCC" />
 
+        <!-- Submit Button -->
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnSubmitReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:backgroundTint="#00C853"
             android:textStyle="bold"
-            android:text="Zaloguj się"
-            android:textColor="#000000"
-            android:textAllCaps="false"
-            android:padding="12dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nie masz konta?"
-            android:textColor="#CCCCCC"
-            android:textSize="16sp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:layout_marginTop="24dp" />
-
-        <Button
-            android:id="@+id/btnGoToRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#FFD600"
-            android:textStyle="bold"
-            android:text="Zarejestruj się!"
+            android:text="Dodaj opinię"
             android:textColor="#000000"
             android:textAllCaps="false"
             android:padding="12dp" />
